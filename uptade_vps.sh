@@ -76,4 +76,5 @@ case $option in
   2) delete_password;;
   3) break;;
   *) echo -e "\e[31mOpción inválida. Inténtelo de nuevo.\e[0m";;
-esac
+  esac
+done
