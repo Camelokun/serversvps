@@ -3,28 +3,10 @@
 # Definir la ruta del archivo JSON
 config_file="/root/udp/config.json"
 
-# Colores para imprimir texto en la consola
-RED='\033[0;31m'
-ORANGE='\033[0;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # Sin color
-
-# Verificar que el archivo JSON exista
-if [ ! -f "$config_file" ]; then
-  echo -e "${RED}El archivo JSON no existe.${NC}"
-  exit 1
-fi
-
-# Verificar que el comando "jq" esté instalado
-if ! command -v jq &> /dev/null; then
-  echo -e "${RED}El comando 'jq' no está instalado.${NC}"
-  exit 1
-fi
-
 # Función para agregar una contraseña
 function add_password() {
   # Leer las nuevas contraseñas desde el usuario
-  echo -e "${BLUE}Ingrese las nuevas contraseñas separadas por comas: ${NC}"
+  echo -e "\e[32mIngrese las nuevas contraseñas separadas por comas: \e[0m"
   read new_passwords
 
   # Convertir las contraseñas a un array
@@ -37,20 +19,61 @@ function add_password() {
   updated_passwords="$existing_passwords,${passwords_arr[@]}"
 
   # Actualizar el archivo JSON con las nuevas contraseñas
-  if jq ".auth.pass = [\"$(echo $updated_passwords | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"; then
-    echo -e "${BLUE}Contraseñas actualizadas correctamente.${NC}"
+  jq ".auth.pass = [\"$(echo $updated_passwords | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
+
+  # Confirmar que se actualizaron las contraseñas correctamente
+  if [ "$?" -eq 0 ]; then
+    echo -e "\e[32mContraseñas actualizadas correctamente.\e[0m"
   else
-    echo -e "${RED}No se pudo actualizar las contraseñas.${NC}"
-    exit 1
+    echo -e "\e[31mNo se pudo actualizar las contraseñas.\e[0m"
   fi
 
   # Recargar el daemon de systemd y reiniciar el servicio
-  if sudo systemctl daemon-reload && sudo systemctl restart udp-custom; then
-    echo -e "${BLUE}Servicio reiniciado correctamente.${NC}"
-  else
-    echo -e "${RED}No se pudo reiniciar el servicio.${NC}"
-    exit 1
-  fi
+  sudo systemctl daemon-reload
+  sudo systemctl restart udp-custom
 }
 
-# Func
+# Función para eliminar una contraseña
+function delete_password() {
+  # Leer las contraseñas existentes desde el archivo JSON
+  existing_passwords=$(jq -r '.auth.pass | join(",")' "$config_file")
+
+  # Leer la contraseña que se quiere eliminar desde el usuario
+  echo -e "\e[32mIngrese la contraseña que desea eliminar: \e[0m"
+  read password_to_delete
+
+  # Eliminar la contraseña del array de contraseñas
+  updated_passwords=$(echo "$existing_passwords" | sed "s/$password_to_delete//g;s/,,/,/g;s/^,//;s/,$//")
+
+  # Actualizar el archivo JSON con las nuevas contraseñas
+  jq ".auth.pass = [\"$(echo $updated_passwords | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
+
+  # Confirmar que se eliminó la contraseña correctamente
+  if [ "$?" -eq 0 ]; then
+    echo -e "\e[32mContraseña eliminada correctamente.\e[0m"
+  else
+    echo -e "\e[31mNo se pudo eliminar la contraseña.\e[0m"
+  fi
+
+  # Recargar el daemon de systemd y reiniciar el servicio
+  sudo systemctl daemon-reload
+  sudo systemctl restart udp-custom
+}
+
+# Loop para mostrar el menú de opciones
+while true; do
+  echo -e "\e[34mSeleccione una opción:\e[0m"
+  echo -e "\e[32m1. Agregar una contraseña\e[0m"
+  echo -e "\e[32m2. Eliminar una contraseña\e[0m"
+  echo -e "\e[32m3. Salir\e[0m"
+
+  # Leer la opción seleccionada desde el usuario
+  read option
+
+  # Evaluar la opción seleccionada
+case $option in
+  1) add_password;;
+  2) delete_password;;
+  3) break;;
+  *) echo -e "\e[31mOpción inválida. Inténtelo de nuevo.\e[0m";;
+esac
