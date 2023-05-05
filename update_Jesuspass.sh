@@ -3,6 +3,16 @@
 # Definir la ruta del archivo JSON
 config_file="/root/udp/config.json"
 
+# Función para mostrar las contraseñas existentes
+function show_passwords() {
+  # Leer las contraseñas desde el archivo JSON
+  passwords=$(jq -r '.auth.pass | join(", ")' "$config_file")
+
+  # Mostrar las contraseñas al usuario
+  echo -e "\e[1m\e[32mContraseñas existentes:\e[0m"
+  echo "$passwords"
+}
+
 # Función para agregar una contraseña
 function add_password() {
   # Leer las nuevas contraseñas desde el usuario
@@ -58,23 +68,33 @@ function delete_password() {
   # Recargar el daemon de systemd y reiniciar el servicio
   sudo systemctl daemon-reload
   sudo systemctl restart udp-custom
+
+  fi
 }
 
-# Loop para mostrar el menú de opciones
+  # Recargar el daemon de systemd y reiniciar el servicio
+
+sudo systemctl daemon-reload
+sudo systemctl restart udp-custom
+
+Menu principal
 while true; do
-  echo -e "\n\e[1m\e[34mSeleccione una opción:\e[0m"
-  echo -e "\e[1m\e[32m1. Agregar una contraseña\e[0m"
-  echo -e "\e[1m\e[32m2. Eliminar una contraseña\e[0m"
-  echo -e "\e[1m\e[32m3. Mostrar contraseñas existentes\e[0m"
-  echo -e "\e[1m\e[32m4. Salir\e[0m"
+echo -e "\e[1m\e[36mGestión de contraseñas para UDP Custom\e[0m"
+echo ""
+echo "Seleccione una opción:"
+echo "1. Mostrar contraseñas existentes"
+echo "2. Agregar una contraseña"
+echo "3. Eliminar una contraseña"
+echo "4. Salir"
+read option
 
-  read choice
+case $option in
+1) show_passwords;;
+2) add_password;;
+3) delete_password;;
+4) break;;
+*) echo -e "\e[1m\e[31mOpción inválida.\e[0m";;
+esac
 
-  case "$choice" in
-    1) add_password ;;
-    2) delete_password ;;
-    3) show_passwords ;;
-    4) exit ;;
-    *) echo -e "\e[1m\e[31mOpción inválida. Intente de nuevo.\e[0m" ;;
-  esac
+echo ""
 done
