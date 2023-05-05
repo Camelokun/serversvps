@@ -68,16 +68,13 @@ function delete_password() {
   # Recargar el daemon de systemd y reiniciar el servicio
   sudo systemctl daemon-reload
   sudo systemctl restart udp-custom
-
-  fi
 }
 
-  # Recargar el daemon de systemd y reiniciar el servicio
-
+# Recargar el daemon de systemd y reiniciar el servicio
 sudo systemctl daemon-reload
 sudo systemctl restart udp-custom
 
-Menu principal
+# Menu principal
 while true; do
 echo -e "\e[1m\e[36mGestión de contraseñas para UDP Custom\e[0m"
 echo ""
