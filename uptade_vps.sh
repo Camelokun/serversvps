@@ -64,16 +64,3 @@ function delete_password() {
   # Recargar el daemon de systemd y reiniciar el servicio
   sudo systemctl daemon-reload
   sudo systemctl restart udp-custom
-}
-
-# Loop para mostrar el menú de opciones
-while true; do
-  echo -e "${BLUE}Seleccione una opción:${NC}"
-  echo -e "${BLUE}1. Agregar una contraseña${NC}"
-  echo -e "${ORANGE}2. Eliminar una contraseña${NC}"
-  echo -e "${RED}3. Salir${NC}"
-
-  # Leer la opción seleccionada desde el usuario
-  read option
-
-  # Evaluar la opción seleccionada
