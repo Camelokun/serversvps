@@ -6,7 +6,7 @@ config_file="/root/udp/config.json"
 # Función para agregar una contraseña
 function add_password() {
   # Leer las nuevas contraseñas desde el usuario
-  echo -e "\e[32mIngrese las nuevas contraseñas separadas por comas: \e[0m"
+  echo -e "\e[1m\e[32mIngrese las nuevas contraseñas separadas por comas: \e[0m"
   read new_passwords
 
   # Convertir las contraseñas a un array
@@ -23,9 +23,9 @@ function add_password() {
 
   # Confirmar que se actualizaron las contraseñas correctamente
   if [ "$?" -eq 0 ]; then
-    echo -e "\e[32mContraseñas actualizadas correctamente.\e[0m"
+    echo -e "\e[1m\e[32mContraseñas actualizadas correctamente.\e[0m"
   else
-    echo -e "\e[31mNo se pudo actualizar las contraseñas.\e[0m"
+    echo -e "\e[1m\e[31mNo se pudo actualizar las contraseñas.\e[0m"
   fi
 
   # Recargar el daemon de systemd y reiniciar el servicio
@@ -39,7 +39,7 @@ function delete_password() {
   existing_passwords=$(jq -r '.auth.pass | join(",")' "$config_file")
 
   # Leer la contraseña que se quiere eliminar desde el usuario
-  echo -e "\e[32mIngrese la contraseña que desea eliminar: \e[0m"
+  echo -e "\e[1m\e[32mIngrese la contraseña que desea eliminar: \e[0m"
   read password_to_delete
 
   # Eliminar la contraseña del array de contraseñas
@@ -50,9 +50,9 @@ function delete_password() {
 
   # Confirmar que se eliminó la contraseña correctamente
   if [ "$?" -eq 0 ]; then
-    echo -e "\e[32mContraseña eliminada correctamente.\e[0m"
+    echo -e "\e[1m\e[32mContraseña eliminada correctamente.\e[0m"
   else
-    echo -e "\e[31mNo se pudo eliminar la contraseña.\e[0m"
+    echo -e "\e[1m\e[31mNo se pudo eliminar la contraseña.\e[0m"
   fi
 
   # Recargar el daemon de systemd y reiniciar el servicio
@@ -62,19 +62,19 @@ function delete_password() {
 
 # Loop para mostrar el menú de opciones
 while true; do
-  echo -e "\e[34mSeleccione una opción:\e[0m"
-  echo -e "\e[32m1. Agregar una contraseña\e[0m"
-  echo -e "\e[32m2. Eliminar una contraseña\e[0m"
-  echo -e "\e[32m3. Salir\e[0m"
+  echo -e "\n\e[1m\e[34mSeleccione una opción:\e[0m"
+  echo -e "\e[1m\e[32m1. Agregar una contraseña\e[0m"
+  echo -e "\e[1m\e[32m2. Eliminar una contraseña\e[0m"
+  echo -e "\e[1m\e[32m3. Mostrar contraseñas existentes\e[0m"
+  echo -e "\e[1m\e[32m4. Salir\e[0m"
 
-  # Leer la opción seleccionada desde el usuario
-  read option
+  read choice
 
-  # Evaluar la opción seleccionada
-case $option in
-  1) add_password;;
-  2) delete_password;;
-  3) break;;
-  *) echo -e "\e[31mOpción inválida. Inténtelo de nuevo.\e[0m";;
+  case "$choice" in
+    1) add_password ;;
+    2) delete_password ;;
+    3) show_passwords ;;
+    4) exit ;;
+    *) echo -e "\e[1m\e[31mOpción inválida. Intente de nuevo.\e[0m" ;;
   esac
 done
