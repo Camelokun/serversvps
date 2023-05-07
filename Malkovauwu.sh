@@ -5,8 +5,8 @@ echo -n "Ingrese la contraseña para instalar el script: "
 read password
 
 # Verificar si la contraseña es correcta
-if [ "$password" != "Camelovps" ]; then
-  echo "La contraseña es incorrecta. La instalación se cancelará."
+if [ "$password" != "JESUS" ]; then
+  echo -e "\e[1m\e[31mLa contraseña es incorrecta. La instalación se cancelará.\e[0m"
   exit 1
 fi
 
@@ -68,7 +68,7 @@ function delete_password() {
   # Actualizar el archivo JSON con las nuevas contraseñas
   jq ".auth.pass = [\"$(echo $updated_passwords | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
 
-  # Confirmar que se eliminó la contraseña correctamente
+ # Confirmar que se eliminó la contraseña correctamente
   if [ "$?" -eq 0 ]; then
     echo -e "\e[1m\e[32mContraseña eliminada correctamente.\e[0m"
   else
@@ -80,28 +80,22 @@ function delete_password() {
   sudo systemctl restart udp-custom
 }
 
-# Recargar el daemon de systemd y reiniciar el servicio
-sudo systemctl daemon-reload
-sudo systemctl restart udp-custom
-
-# Menu principal
+# Mostrar el menú de opciones al usuario
 while true; do
-echo -e "\e[1m\e[36mGestión de contraseñas para UDP Custom\e[0m"
-echo ""
-echo "Seleccione una opción:"
-echo "1. Mostrar contraseñas existentes"
-echo "2. Agregar una contraseña"
-echo "3. Eliminar una contraseña"
-echo "4. Salir"
-read option
+  echo -e "\n\e[1m\e[32mMenú de opciones:\e[0m"
+  echo "1. Mostrar contraseñas existentes"
+  echo "2. Agregar una contraseña"
+  echo "3. Eliminar una contraseña"
+  echo "4. Salir"
 
-case $option in
-1) show_passwords;;
-2) add_password;;
-3) delete_password;;
-4) break;;
-*) echo -e "\e[1m\e[31mOpción inválida.\e[0m";;
-esac
+  # Leer la opción del usuario
+  read -p "Ingrese una opción: " option
 
-echo ""
+  case $option in
+    1) show_passwords;;
+    2) add_password;;
+    3) delete_password;;
+    4) exit;;
+    *) echo -e "\e[1m\e[31mOpción inválida.\e[0m";;
+  esac
 done
