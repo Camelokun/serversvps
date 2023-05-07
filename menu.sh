@@ -68,38 +68,11 @@ function delete_password() {
   # Actualizar el archivo JSON con las nuevas contraseñas
   jq ".auth.pass = [\"$(echo $updated_passwords | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
 
-  # Confirmar que se actualizaron las contraseñas correctamente
+    # Confirmar que se actualizaron las contraseñas correctamente
   if [ "$?" -eq 0 ]; then
     echo -e "\e[2m\e[32mContraseñas actualizadas correctamente.\e[0m"
   else
     echo -e "\e[2m\e[31mNo se pudo actualizar las contraseñas.\e[0m"
-  fi
-
-  # Recargar el daemon de systemd y reiniciar el servicio
-  sudo systemctl daemon-reload
-  sudo systemctl restart udp-custom
-}
-
-# Función para eliminar una contraseña
-function delete_password() {
-  # Leer las contraseñas existentes desde el archivo JSON
-  existing_passwords=$(jq -r '.auth.pass | join(",")' "$config_file")
-
-  # Leer la contraseña que se quiere eliminar desde el usuario
-  echo -e "\e[2m\e[32mIngrese la contraseña que desea eliminar: \e[0m"
-  read password_to_delete
-
-  # Eliminar la contraseña del array de contraseñas
-  updated_passwords=$(echo "$existing_passwords" | sed "s/$password_to_delete//g;s/,,/,/g;s/^,//;s/,$//")
-
-  # Actualizar el archivo JSON con las nuevas contraseñas
-  jq ".auth.pass = [\"$(echo $updated_passwords | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
-
-  # Confirmar que se actualizaron las contraseñas correctamente
-  if [ "$?" -eq 0 ]; then
-    echo -e "\e[2m\e[32mContraseña eliminada correctamente.\e[0m"
-  else
-    echo -e "\e[2m\e[31mNo se pudo eliminar la contraseña.\e[0m"
   fi
 
   # Recargar el daemon de systemd y reiniciar el servicio
@@ -114,7 +87,7 @@ function add_user() {
   read new_user
 
   # Leer los usuarios existentes desde el archivo JSON
-  existing_users=$(jq -r '.users | join(",")' "$config_file")
+  existing_users=$(jq -r '.user | join(",")' "$config_file")
 
   # Verificar si el usuario ya existe
   if echo "$existing_users" | grep -q "\<$new_user\>"; then
@@ -126,18 +99,19 @@ function add_user() {
   updated_users="$existing_users,$new_user"
 
   # Actualizar el archivo JSON con los nuevos usuarios
-  jq ".users = [\"$(echo $updated_users | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
+  jq ".user = [\"$(echo $updated_users | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
 
   # Confirmar que se agregó el usuario correctamente
   if [ "$?" -eq 0 ]; then
     echo -e "\e[2m\e[32mUsuario agregado correctamente.\e[0m"
-    else
+  else
     echo -e "\e[2m\e[31mNo se pudo agregar el usuario.\e[0m"
   fi
-}
+
   # Recargar el daemon de systemd y reiniciar el servicio
   sudo systemctl daemon-reload
   sudo systemctl restart udp-custom
+}
 
 # Mostrar el menú de opciones al usuario
 while true; do
