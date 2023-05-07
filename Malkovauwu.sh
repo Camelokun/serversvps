@@ -10,9 +10,6 @@ if [ "$password" != "Camelovps" ]; then
   exit 1
 fi
 
-# Instalar dependencias necesarias
-apt-get update && apt-get install -y jq
-
 # Definir la ruta del archivo JSON
 config_file="/root/udp/config.json"
 
