@@ -96,7 +96,7 @@ function add_user() {
   else
     echo -e "\e[1m\e[31mNo se pudo agregar el usuario.\e[0m"
   fi
-
+}
   # Recargar el daemon de systemd y reiniciar el servicio
   sudo systemctl daemon-reload
   sudo systemctl restart udp-custom
@@ -122,4 +122,3 @@ function add_user() {
       *) echo -e "\e[1m\e[31mOpción inválida.\e[0m";;
     esac
   done
-}
