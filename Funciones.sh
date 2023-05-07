@@ -67,7 +67,9 @@ function delete_password() {
 
   # Actualizar el archivo JSON con las nuevas contraseñas
   jq ".auth.pass = [\"$(echo $updated_passwords | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
-  # Función para agregar un nuevo usuario
+}
+
+# Función para agregar un nuevo usuario
 function add_user() {
   # Leer el nuevo usuario desde el usuario
   echo -e "\e[1m\e[32mIngrese el nombre del nuevo usuario: \e[0m"
@@ -98,26 +100,26 @@ function add_user() {
   # Recargar el daemon de systemd y reiniciar el servicio
   sudo systemctl daemon-reload
   sudo systemctl restart udp-custom
+
+  # Mostrar el menú de opciones al usuario
+  while true; do
+    echo -e "\n\e[1m\e[32mMenú de opciones:\e[0m"
+    echo "1. Mostrar contraseñas existentes"
+    echo "2. Agregar una contraseña"
+    echo "3. Eliminar una contraseña"
+    echo "4. Agregar un nuevo usuario"
+    echo "5. Salir"
+
+    # Leer la opción del usuario
+    read -p "Ingrese una opción: " option
+
+    case $option in
+      1) show_passwords;;
+      2) add_password;;
+      3) delete_password;;
+      4) add_user;;
+      5) exit;;
+      *) echo -e "\e[1m\e[31mOpción inválida.\e[0m";;
+    esac
+  done
 }
-
-# Mostrar el menú de opciones al usuario
-while true; do
-  echo -e "\n\e[1m\e[32mMenú de opciones:\e[0m"
-  echo "1. Mostrar contraseñas existentes"
-  echo "2. Agregar una contraseña"
-  echo "3. Eliminar una contraseña"
-  echo "4. Agregar un nuevo usuario"
-  echo "5. Salir"
-
-  # Leer la opción del usuario
-  read -p "Ingrese una opción: " option
-
-  case $option in
-    1) show_passwords;;
-    2) add_password;;
-    3) delete_password;;
-    4) add_user;;
-    5) exit;;
-    *) echo -e "\e[1m\e[31mOpción inválida.\e[0m";;
-  esac
-done
