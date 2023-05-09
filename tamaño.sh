@@ -80,21 +80,37 @@ function delete_password() {
 }
 
 # Mostrar el menú de opciones al usuario
+
 while true; do
+
   echo -e "\n\e[1m\e[32mMenú de opciones:\e[0m"
-  echo -e "\e[2m\e[1m1. Mostrar contraseñas existentes\e[0m"
-  echo -e "\e[2m\e[1m2. Agregar una contraseña\e[0m"
-  echo -e "\e[2m\e[1m3. Eliminar una contraseña\e[0m"
-  echo -e "\e[2m\e[1m4. Salir\e[0m"
+
+  echo -e "\e[5m\e[1m1. Mostrar contraseñas existentes\e[0m"
+
+  echo -e "\e[5m\e[1m2. Agregar una contraseña\e[0m"
+
+  echo -e "\e[5m\e[1m3. Eliminar una contraseña\e[0m"
+
+  echo -e "\e[5m\e[1m4. Salir\e[0m"
 
   # Leer la opción del usuario
+
   read -p "Ingrese una opción: " option
 
   case $option in
+
     1) show_passwords;;
+
     2) add_password;;
+
     3) delete_password;;
+
     4) exit;;
+
     *) echo -e "\e[1m\e[31mOpción inválida.\e[0m";;
+
   esac
+
 done
+
+
