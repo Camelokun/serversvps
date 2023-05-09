@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Pedir una contraseña para instalar el script
-echo -n "Ingrese la contraseña para instalar el script: "
+echo -n -e "\e[6;30;42mIngrese la contraseña para instalar el script: \e[0m"
 read password
 
 # Verificar si la contraseña es correcta
@@ -19,14 +19,14 @@ function show_passwords() {
   passwords=$(jq -r '.auth.pass | join(", ")' "$config_file")
 
   # Mostrar las contraseñas al usuario
-  echo -e "\e[1m\e[32mContraseñas existentes:\e[0m"
-  echo "$passwords"
+  echo -e "\n\e[6;30;42mContraseñas existentes:\e[0m"
+  echo -e "\e[1m$passwords\e[0m"
 }
 
 # Función para agregar una contraseña
 function add_password() {
   # Leer las nuevas contraseñas desde el usuario
-  echo -e "\e[1m\e[32mIngrese las nuevas contraseñas separadas por comas: \e[0m"
+  echo -e "\n\e[6;30;42mIngrese las nuevas contraseñas separadas por comas: \e[0m"
   read new_passwords
 
   # Convertir las contraseñas a un array
@@ -43,9 +43,9 @@ function add_password() {
 
   # Confirmar que se actualizaron las contraseñas correctamente
   if [ "$?" -eq 0 ]; then
-    echo -e "\e[1m\e[32mContraseñas actualizadas correctamente.\e[0m"
+    echo -e "\n\e[6;30;42mContraseñas actualizadas correctamente.\e[0m"
   else
-    echo -e "\e[1m\e[31mNo se pudo actualizar las contraseñas.\e[0m"
+    echo -e "\n\e[1m\e[31mNo se pudo actualizar las contraseñas.\e[0m"
   fi
 
   # Recargar el daemon de systemd y reiniciar el servicio
@@ -53,13 +53,12 @@ function add_password() {
   sudo systemctl restart udp-custom
 }
 
-# Función para eliminar una contraseña
 function delete_password() {
   # Leer las contraseñas existentes desde el archivo JSON
   existing_passwords=$(jq -r '.auth.pass | join(",")' "$config_file")
 
   # Leer la contraseña que se quiere eliminar desde el usuario
-  echo -e "\e[1m\e[32mIngrese la contraseña que desea eliminar: \e[0m"
+  echo -e "\n\e[6;30;42mIngrese la contraseña que desea eliminar:\e[0m"
   read password_to_delete
 
   # Eliminar la contraseña del array de contraseñas
@@ -68,7 +67,7 @@ function delete_password() {
   # Actualizar el archivo JSON con las nuevas contraseñas
   jq ".auth.pass = [\"$(echo $updated_passwords | sed 's/,/", "/g')\"]" "$config_file" > tmp.json && mv tmp.json "$config_file"
 
- # Confirmar que se eliminó la contraseña correctamente
+  # Confirmar que se eliminó la contraseña correctamente
   if [ "$?" -eq 0 ]; then
     echo -e "\e[1m\e[32mContraseña eliminada correctamente.\e[0m"
   else
@@ -83,10 +82,10 @@ function delete_password() {
 # Mostrar el menú de opciones al usuario
 while true; do
   echo -e "\n\e[1m\e[32mMenú de opciones:\e[0m"
-  echo "1. Mostrar contraseñas existentes"
-  echo "2. Agregar una contraseña"
-  echo "3. Eliminar una contraseña"
-  echo "4. Salir"
+  echo -e "\e[1m1. Mostrar contraseñas existentes\e[0m"
+  echo -e "\e[1m2. Agregar una contraseña\e[0m"
+  echo -e "\e[1m3. Eliminar una contraseña\e[0m"
+  echo -e "\e[1m4. Salir\e[0m"
 
   # Leer la opción del usuario
   read -p "Ingrese una opción: " option
