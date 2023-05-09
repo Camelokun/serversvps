@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Pedir una contraseña para instalar el script
-echo -n -e "\e[6;30;42mIngrese la contraseña para instalar el script: \e[0m"
+echo -n -e "\e[6;30;42mIngrese la contraseña para abrir el scrip: \e[0m"
 read password
 
 # Verificar si la contraseña es correcta
 if [ "$password" != "JESUS" ]; then
-  echo -e "\e[1m\e[31mLa contraseña es incorrecta. La instalación se cancelará.\e[0m"
+  echo -e "\e[1m\e[31mLa contraseña es incorrecta. Valiste verga perro.\e[0m"
   exit 1
 fi
 
