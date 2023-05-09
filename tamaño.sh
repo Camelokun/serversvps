@@ -5,7 +5,7 @@ echo -n -e "\e[6;30;42mIngrese la contraseña para abrir el scrip: \e[0m"
 read password
 
 # Verificar si la contraseña es correcta
-if [ "$password" != "JESUS" ]; then
+if [ "$password" != "2023UWU" ]; then
   echo -e "\e[1m\e[31mLa contraseña es incorrecta. Valiste verga perro.\e[0m"
   exit 1
 fi
