@@ -83,15 +83,15 @@ function delete_password() {
 
 while true; do
 
-  echo -e "\n\e[1m\e[48;5;82m𝗠𝗲𝗻𝘂 𝗱𝗲 𝗼𝗽𝗰𝗶𝗼𝗻𝗲𝘀:\e[0m"
+  echo -e "\n\e[1m\u001b[31mMenú de opciones:\u001b[0m"
 
-  echo -e "\e[1m\e[48;5;82m𝟭. 𝗠𝗼𝘀𝘁𝗿𝗮𝗿 𝗰𝗼𝗻𝘁𝗿𝗮𝘀𝗲ñ𝗮𝘀 𝗲𝘅𝗶𝘀𝘁𝗲𝗻𝘁𝗲𝘀\e[0m"
+  echo -e "\e[1m\u001b[31m1. Mostrar contraseñas existentes\u001b[0m"
 
-  echo -e "\e[1m\e[48;5;82m𝟮. 𝗔𝗴𝗿𝗲𝗴𝗮𝗿 𝘂𝗻𝗮 𝗰𝗼𝗻𝘁𝗿𝗮𝘀𝗲ñ𝗮\e[0m"
+  echo -e "\e[1m\u001b[31m2. Agregar una contraseña nueva\u001b[0m"
 
-  echo -e "\e[1m\e[48;5;82m𝟯. 𝗘𝗹𝗶𝗺𝗶𝗻𝗮𝗿 𝘂𝗻𝗮 𝗰𝗼𝗻𝘁𝗿𝗮𝘀𝗲ñ𝗮\e[0m"
+  echo -e "\e[1m\u001b[31m3. Eliminar una contraseña existente\u001b[0m"
 
-  echo -e "\e[1m\e[48;5;82m𝟰. 𝗦𝗮𝗹𝗶𝗿\e[0m"
+  echo -e "\e[1m\u001b[31m4. Salir\u001b[0m"
 
   # Leer la opción del usuario
 
@@ -113,7 +113,4 @@ while true; do
 
 done
 
-  
-
-
-
+ 
