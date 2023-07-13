@@ -1,7 +1,6 @@
 #!/bin/bash
 
 while true; do
-  echo "SCRIPT PARA VER CONECTADOS ONLINE"
   echo "1. Ver conectados en el puerto 443"
   echo "2. Ver conectados en el puerto 80"
   echo "3. Salir"
